@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 16 Jun 2025 pada 10.14
--- Versi server: 10.4.27-MariaDB
--- Versi PHP: 8.2.0
+-- Generation Time: Jun 16, 2025 at 10:48 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,39 +24,53 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `layanan`
+-- Table structure for table `detail_pesanan`
 --
 
-CREATE TABLE `layanan` (
-  `layanan_id` int(11) NOT NULL,
-  `nama_layanan` varchar(25) NOT NULL,
-  `jenis_layanan` varchar(25) NOT NULL,
-  `harga` float NOT NULL
+CREATE TABLE `detail_pesanan` (
+  `id_detail` int(11) NOT NULL,
+  `id_pesanan` int(11) NOT NULL,
+  `id_layanan` int(11) NOT NULL,
+  `jumlah` decimal(5,2) NOT NULL,
+  `subtotal` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pesanan`
+-- Table structure for table `layanan`
+--
+
+CREATE TABLE `layanan` (
+  `id_layanan` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `harga` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pesanan`
 --
 
 CREATE TABLE `pesanan` (
   `id_pesanan` int(11) NOT NULL,
-  `user_id` int(10) NOT NULL,
-  `layanan_id` int(11) NOT NULL
+  `id_user` int(11) NOT NULL,
+  `tanggal` date NOT NULL,
+  `status` varchar(50) DEFAULT 'Menunggu'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
-  `user_id` int(10) NOT NULL,
-  `username` varchar(25) NOT NULL,
-  `password` varchar(25) NOT NULL,
-  `no_telp` varchar(13) NOT NULL
+  `id_user` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `alamat` text DEFAULT NULL,
+  `no_hp` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -64,44 +78,76 @@ CREATE TABLE `user` (
 --
 
 --
--- Indeks untuk tabel `layanan`
+-- Indexes for table `detail_pesanan`
 --
-ALTER TABLE `layanan`
-  ADD PRIMARY KEY (`layanan_id`);
+ALTER TABLE `detail_pesanan`
+  ADD PRIMARY KEY (`id_detail`),
+  ADD KEY `id_pesanan` (`id_pesanan`),
+  ADD KEY `id_layanan` (`id_layanan`);
 
 --
--- Indeks untuk tabel `pesanan`
+-- Indexes for table `layanan`
+--
+ALTER TABLE `layanan`
+  ADD PRIMARY KEY (`id_layanan`);
+
+--
+-- Indexes for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  ADD PRIMARY KEY (`id_pesanan`);
+  ADD PRIMARY KEY (`id_pesanan`),
+  ADD KEY `id_user` (`id_user`);
 
 --
--- Indeks untuk tabel `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `layanan`
+-- AUTO_INCREMENT for table `detail_pesanan`
+--
+ALTER TABLE `detail_pesanan`
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `layanan`
 --
 ALTER TABLE `layanan`
-  MODIFY `layanan_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_layanan` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `pesanan`
+-- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
   MODIFY `id_pesanan` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `detail_pesanan`
+--
+ALTER TABLE `detail_pesanan`
+  ADD CONSTRAINT `detail_pesanan_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`),
+  ADD CONSTRAINT `detail_pesanan_ibfk_2` FOREIGN KEY (`id_layanan`) REFERENCES `layanan` (`id_layanan`);
+
+--
+-- Constraints for table `pesanan`
+--
+ALTER TABLE `pesanan`
+  ADD CONSTRAINT `pesanan_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
