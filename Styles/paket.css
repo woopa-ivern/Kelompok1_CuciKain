@@ -1,0 +1,81 @@
+/* CONTENT 4 */
+
+.contents.content-4{
+    padding-top: 150px;
+}
+
+.content-4 .card-item {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+}
+
+.content-4 .list-item {
+    width: calc(100% / 3.3);
+    margin: 0 auto;
+}
+
+.content-4 img {
+    max-width: 100%;
+    width: 90px;
+}
+
+.content-4 .inner-wrapper {
+    padding: 45px 25px;
+    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: 0.3s ease-in-out;
+}
+
+.content-4 .inner-wrapper:hover {
+    transform: scale(1.1);
+}
+
+.content-4 {
+    padding: 50px 0;
+}
+
+.content-4 .price {
+    font-size: 20px;
+    color: #219EBC;
+    margin-bottom: 15px;
+}
+
+.content-4 a {
+    font-size: 18px;
+    padding: 15px 40px;
+    background-color: #219EBC;
+    border-radius: 50px;
+    color: #FFFFFF;
+    font-weight: 600;
+    margin-top: 25px;
+    display: block;
+    text-align: center;
+    position: relative;
+    transition: top 0.4s ease;
+    top: 0px;
+}
+
+.content-4 a:hover {
+    background-color: #17859f;
+    top: -10px;
+}
+
+.content-4 .heading {
+    padding-bottom: 50px;
+    text-align: center;
+}
+
+.content-4 .heading :first-child {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+}
+
+.content-4 .heading :nth-child(2) {
+    font-size: 18px;
+}
+
+/* CONTENT 4 */

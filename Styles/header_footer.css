@@ -1,0 +1,139 @@
+/* General Styling */
+
+:root{
+    --txt-logo: clamp(1.5rem, 3.75vw, 2.5rem);
+    --img-logo: clamp(50px, 7vw, 80px);
+    --txt-nav: clamp(1rem, 1.5vw, 1.5rem);
+}
+
+*{
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+p, ul, li, a, h1, h2, h3, h4, h5, span{
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    text-decoration: none;
+    color: #000000;
+}
+
+/* General Styling */
+
+/* Header and Navbar */
+
+.site-header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    box-shadow: 4px 3px 16px rgba(0, 0, 0, 0.1);
+    background-color: #FFFFFF;
+}
+
+.site-header .navbar-header {
+    height: 110px;
+}
+
+.container {
+    width: calc(100% - 48px);
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.site-branding {
+    display: flex;
+    align-items: center;
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.site-header .site-branding img {
+    width: var(--img-logo);
+}
+
+.site-header .site-navigation {
+    margin-left: auto;
+    height: 100%;
+}
+
+.site-header .primary-menu {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.site-header .main-navbar {
+    height: 100%;
+}
+
+.site-header .menu-item {
+    margin-right: 45px;
+}
+
+.site-header .menu-item>a{
+    font-size: var(--txt-nav);
+}
+
+.site-header .site-branding>a {
+    font-size: var(--txt-logo);
+    font-weight: 500;
+    color: #219EBC;
+}
+
+.site-header .site-branding :first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Header and Navbar */
+
+
+/* Footer */
+
+.site-footer {
+    text-align: center;
+    background-color: #219EBC;
+    padding: 50px;
+}
+
+.site-footer .wrapper>:first-child {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    color: #FFFFFF;
+}
+
+.site-footer .icon-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.site-footer .icon-group img {
+    width: 40px;
+}
+
+.site-footer .wrapper>:nth-child(2) {
+    font-size: clamp(18px, 2.5vw, 20px);
+    color: lightgray;
+}
+
+.site-footer .wrapper>:last-child {
+    margin-top: 25px;
+    color: lightgray;
+}
+
+.site-footer .wrapper span {
+    color: #115e96;
+}
+
+/* Footer */

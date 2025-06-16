@@ -1,0 +1,70 @@
+/* CONTENT 2 */
+
+.contents.content-2.container {
+    padding-top: 70px;
+}
+
+.content-2 .card-item {
+    display: flex;
+    text-align: center;
+    padding-bottom: 25px;
+}
+
+.content-2 .inner-wrapper {
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.content-2 .listing-card {
+    margin-right: 30px;
+}
+
+.content-2 .listing-card:last-child {
+    margin-right: 0;
+}
+
+.content-2 .wrapper {
+    padding: 50px 0;
+}
+
+.content-2 .listing-card img {
+    max-width: 100%;
+    width: 100px;
+}
+
+.content-2 .inner-wrapper :nth-child(2) {
+    font-size: 22px;
+    font-weight: 700;
+    color: #000000;
+    margin-top: 5px;
+}
+
+.content-2 .inner-wrapper :last-child {
+    font-size: 17px;
+    font-weight: 500;
+    opacity: 0.9;
+    margin-top: 10px;
+}
+
+.content-2 .inner-wrapper:hover {
+    transform: scale(1.1);
+}
+
+.content-2 .heading {
+    padding-bottom: 50px;
+    padding-top: 30px;
+    text-align: center;
+}
+
+.content-2 .heading :first-child {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+}
+
+.content-2 .heading :nth-child(2) {
+    font-size: 18px;
+}
+
+/* CONTENT 2 */
