@@ -33,7 +33,9 @@ if (isset($_POST['aksi']) && $_POST['aksi'] == 'tambah') {
     $query_tambah = "INSERT INTO user (nama, alamat, no_hp, username, password, role) VALUES ('$nama', '$alamat', '$no_hp', '$username', '$password', '$role')";
 
     if (mysqli_query($koneksi, $query_tambah)) {
-        $pesan = "<script>alert('Data berhasil ditambahkan!'); window.location='dashboard.php?page=user';</script>";
+        $pesan = "<script>alert('Data berhasil ditambahkan!');</script>"; // Alert ini mungkin tidak muncul karena redirect
+        header("Location: dashboard.php?page=user");
+        exit(); // <<<--- PASTIKAN ADA INI SETELAH REDIRECT
     } else {
         $pesan = "<script>alert('Error: " . mysqli_error($koneksi) . "');</script>";
     }
@@ -57,7 +59,9 @@ if (isset($_POST['aksi']) && $_POST['aksi'] == 'update') {
     }
 
     if (mysqli_query($koneksi, $query_update)) {
-        $pesan = "<script>alert('Data berhasil diupdate!'); window.location='dashboard.php?page=user';</script>";
+        $pesan = "<script>alert('Data berhasil diupdate!');</script>"; // Alert ini mungkin tidak muncul karena redirect
+        header("Location: dashboard.php?page=user");
+        exit(); // <<<--- PASTIKAN ADA INI SETELAH REDIRECT
     } else {
         $pesan = "<script>alert('Error: " . mysqli_error($koneksi) . "');</script>";
     }
@@ -69,7 +73,9 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'hapus' && isset($_GET['id_user']))
     $query_hapus = "DELETE FROM user WHERE id_user=$id_user";
 
     if (mysqli_query($koneksi, $query_hapus)) {
-        $pesan = "<script>alert('Data berhasil dihapus!'); window.location='dashboard.php?page=user';</script>";
+        $pesan = "<script>alert('Data berhasil dihapus!');</script>"; // Alert ini mungkin tidak muncul karena redirect
+        header("Location: dashboard.php?page=user");
+        exit(); // <<<--- PASTIKAN ADA INI SETELAH REDIRECT
     } else {
         $pesan = "<script>alert('Error: " . mysqli_error($koneksi) . "');</script>";
     }
