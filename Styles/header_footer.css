@@ -79,7 +79,7 @@ p, ul, li, a, h1, h2, h3, h4, h5, span{
 }
 
 .site-header .menu-item {
-    margin-right: 45px;
+    margin-right: 40px;
 }
 
 .site-header .menu-item>a{
@@ -138,6 +138,16 @@ p, ul, li, a, h1, h2, h3, h4, h5, span{
 
 .site-footer .wrapper span {
     color: #115e96;
+}
+
+
+.site-header .menu-item img {
+    width: 40px;
+}
+
+.menu-item.profile a {
+    height: 100%;
+    display: flex;
 }
 
 /* Footer */

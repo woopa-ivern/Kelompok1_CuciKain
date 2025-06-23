@@ -24,7 +24,7 @@
                         <ul class="primary-menu">
                             <li class="menu-item"><a href="index.php">Beranda</a></li>
                             <li class="menu-item"><a href="tentang.php">Tentang Kami</a></li>
-                            <li class="menu-item"><a href="galeri.php">Paket</a></li>
+                            <li class="menu-item"><a href="paket.php">Paket</a></li>
                             <li class="menu-item"><a href="kontak.php">Kontak</a></li>
                             <li class="menu-item"><a href="login.php">Masuk</a></li>
                         </ul>

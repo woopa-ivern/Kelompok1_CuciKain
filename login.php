@@ -24,7 +24,7 @@
                         <ul class="primary-menu">
                             <li class="menu-item"><a href="index.php">Beranda</a></li>
                             <li class="menu-item"><a href="tentang.php">Tentang Kami</a></li>
-                            <li class="menu-item"><a href="galeri.php">Paket</a></li>
+                            <li class="menu-item"><a href="paket.php">Paket</a></li>
                             <li class="menu-item"><a href="kontak.php">Kontak</a></li>
                             <li class="menu-item"><a href="login.php">Masuk</a></li>
                         </ul>
@@ -38,8 +38,31 @@
             <section>
                 <div class="contents content-5 container">
                     <div class="wrapper">
-                        <form action="dashboard_user.php" method="post">
+                        <form action="signup.php" method="post">
                             <div class="login-container">
+                                <div class="login-box">
+                                    <h2>Masuk</h2>
+                                    <?php if (!empty($pesan_error)): ?>
+                                        <p class="error-message"><?php echo $pesan_error; ?></p>
+                                    <?php endif; ?>
+                                    <form action="login.php" method="POST">
+                                        <div class="input-group">
+                                            <input type="text" name="username" placeholder="Username" required>
+                                        </div>
+                                        <div class="input-group">
+                                            <input type="password" name="password" placeholder="Password" required>
+                                        </div>
+                                        <div class="paket">
+                                  <span>Belum punya akun? </span><a href="signup.php">Daftar</a>
+                                </div>
+                                        <button type="submit" class="login-btn">Login</button>
+                                    </form>
+                                    <div class="galeri">
+                                  Kunjungi galeri kami <a href="#">Disini</a>
+                                </div>
+                                </div>
+                            </div>
+                            <!-- <div class="login-container">
                                 <h2>Masuk</h2>
                             <br>
                                 <input type="text" placeholder="Username" name="nama" required>
@@ -54,7 +77,7 @@
                                 <div class="galeri">
                                   Kunjungi galeri kami <a href="#">Disini</a>
                                 </div>
-                              </div>
+                            </div> -->
                         </form>
                     </div>
                 </div>
