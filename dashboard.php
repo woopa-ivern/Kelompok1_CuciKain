@@ -1,222 +1,226 @@
+<?php
+// koneksi.php
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db   = "cuci_kain";
+$koneksi = mysqli_connect($host, $user, $pass, $db);
+if (!$koneksi) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Styles/header_footer.css">
-    <link rel="stylesheet" href="styles/dashboard.css">
-    <link rel="stylesheet" href="TESTING/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="images/Logo_CuciKain.png" type="image/x-icon">
-    <title>Dashboard CuciKain</title>
+    <title>Dashboard Aplikasi</title>
+    <style>
+        /* CSS Umum untuk Layout Dashboard */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex; /* Menggunakan flexbox untuk layout sidebar dan konten */
+            min-height: 100vh; /* Pastikan tinggi minimal 100% viewport */
+            background-color: #f4f4f4;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #28a7e2; /* Warna biru sidebar sesuai gambar */
+            color: white;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-logo img {
+            width: 100px; /* Sesuaikan ukuran logo */
+            height: auto;
+            border-radius: 8px; /* Jika logo berupa kotak/gambar */
+            background-color: #fff; /* Latar belakang untuk logo seperti di gambar */
+            padding: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #1e87bb; /* Warna hover/active lebih gelap */
+        }
+
+        .main-content {
+            flex-grow: 1; /* Mengisi sisa ruang */
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        /* Styling untuk konten yang dimuat (mirip dengan main.php sebelumnya) */
+        .content-area {
+            max-width: 850px; /* Lebar konten utama */
+            margin: 0 auto; /* Tengah */
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-area h2 {
+            text-align: left; /* Sesuaikan dengan gambar */
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Styling untuk tabel dan form di dalam content-area */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px 0;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-add {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-edit {
+            background-color: #008CBA;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"],
+        form select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        form button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        form button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
 </head>
-
 <body>
-    <main class="site-main">
-        <aside class="sidebar">
-            <div class="dashboard-container">
-                <div class="wrapper">
-                    <div class="dash-logo">
-                        <img src="images/Logo_CuciKain.png" alt="">
-                    </div>
-                    <nav class="dash-menu">
-                        <ul class="dash-listing">
-                            <li class="list-item">Informasi</li>
-                            <li class="list-item">Customer</li>
-                            <li class="list-item">Detail Pesanan</li>
-                            <li class="list-item">Layanan</li>
-                            <li class="list-item">Pesanan</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </aside>
-        <section>
-            <div class="dash-content">
-                <div class="container">
-                    <h2>Manajemen Pengguna</h2>
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="images/Logo_CuciKain.png" alt="Logo"> </div>
+        <ul>
+            <li><a href="dashboard.php?page=informasi" <?php if(!isset($_GET['page']) || $_GET['page'] == 'informasi') echo 'class="active"'; ?>>Informasi</a></li>
+            <li><a href="dashboard.php?page=user" <?php if(isset($_GET['page']) && $_GET['page'] == 'user') echo 'class="active"'; ?>>User</a></li>
+            <li><a href="dashboard.php?page=detail_pesanan" <?php if(isset($_GET['page']) && $_GET['page'] == 'detail_pesanan') echo 'class="active"'; ?>>Detail Pesanan</a></li>
+            <li><a href="dashboard.php?page=layanan" <?php if(isset($_GET['page']) && $_GET['page'] == 'layanan') echo 'class="active"'; ?>>Layanan</a></li>
+            <li><a href="dashboard.php?page=pesanan" <?php if(isset($_GET['page']) && $_GET['page'] == 'pesanan') echo 'class="active"'; ?>>Pesanan</a></li>
+        </ul>
+    </div>
 
-                    <?php
-                    $servername = "localhost";
-                    $username_db = "root";
-                    $password_db = "";
-                    $dbname = "cuci_kain";
+    <div class="main-content">
+        <div class="content-area">
+            <?php
+            // Logika untuk include file berdasarkan parameter 'page'
+            $page = isset($_GET['page']) ? $_GET['page'] : 'informasi'; // Default ke informasi jika tidak ada parameter
 
-                    $conn = mysqli_connect($servername, $username_db, $password_db, $dbname);
-
-                    if (!$conn) {
-                        die("Koneksi gagal: " . mysqli_connect_error());
-                    }
-
-                    $edit_id_user = '';
-                    $edit_nama = '';
-                    $edit_alamat = '';
-                    $edit_no_hp = '';
-                    $edit_username = '';
-                    $edit_password = '';
-                    $form_button_text = 'Tambah Pengguna Baru';
-                    $form_action_type = 'add';
-
-                    if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
-                        $id_to_edit = intval($_GET['id']);
-
-                        $stmt_select_edit = mysqli_prepare($conn, "SELECT id_user, nama, alamat, no_hp, username FROM user WHERE id_user = ?");
-                        mysqli_stmt_bind_param($stmt_select_edit, "i", $id_to_edit);
-                        mysqli_stmt_execute($stmt_select_edit);
-                        $result_edit = mysqli_stmt_get_result($stmt_select_edit);
-
-                        if (mysqli_num_rows($result_edit) > 0) {
-                            $row_edit = mysqli_fetch_assoc($result_edit);
-                            $edit_id_user = $row_edit['id_user'];
-                            $edit_nama = $row_edit['nama'];
-                            $edit_alamat = $row_edit['alamat'];
-                            $edit_no_hp = $row_edit['no_hp'];
-                            $edit_username = $row_edit['username'];
-                            $form_button_text = 'Update Pengguna';
-                            $form_action_type = 'update';
-                        } else {
-                            echo "<p class='message warning'>Pengguna tidak ditemukan untuk diedit.</p>";
-                        }
-                        mysqli_stmt_close($stmt_select_edit);
-                    }
-
-                    if (isset($_POST['submit_button'])) {
-                        $nama_form = trim($_POST['nama']);
-                        $alamat_form = trim($_POST['alamat']);
-                        $no_hp_form = trim($_POST['no_hp']);
-                        $username_form = trim($_POST['username']);
-                        $password_form = $_POST['password'];
-                        $id_user_form = trim($_POST['id_user']);
-                        $current_action_type = $_POST['form_action_type'];
-
-                        if (empty($nama_form) || empty($username_form)) {
-                            echo "<p class='message error'>Nama dan Username tidak boleh kosong!</p>";
-                        } else {
-                            $hashed_password = md5($password_form);
-
-                            if ($current_action_type == 'update' && !empty($id_user_form)) {
-                                $id_user_form = intval($id_user_form);
-
-                                if (!empty($password_form)) {
-                                    $sql_update = "UPDATE user SET nama = ?, alamat = ?, no_hp = ?, username = ?, password = ? WHERE id_user = ?";
-                                    $stmt_update = mysqli_prepare($conn, $sql_update);
-                                    mysqli_stmt_bind_param($stmt_update, "sssssi", $nama_form, $alamat_form, $no_hp_form, $username_form, $hashed_password, $id_user_form);
-                                } else {
-                                    $sql_update = "UPDATE user SET nama = ?, alamat = ?, no_hp = ?, username = ? WHERE id_user = ?";
-                                    $stmt_update = mysqli_prepare($conn, $sql_update);
-                                    mysqli_stmt_bind_param($stmt_update, "ssssi", $nama_form, $alamat_form, $no_hp_form, $username_form, $id_user_form);
-                                }
-
-                                if (mysqli_stmt_execute($stmt_update)) {
-                                    echo "<p class='message success'>Data pengguna berhasil diperbarui!</p>";
-                                    $edit_id_user = '';
-                                    $edit_nama = '';
-                                    $edit_alamat = '';
-                                    $edit_no_hp = '';
-                                    $edit_username = '';
-                                    $edit_password = '';
-                                    $form_button_text = 'Tambah Pengguna Baru';
-                                    $form_action_type = 'add';
-                                } else {
-                                    echo "<p class='message error'>Error memperbarui data: " . mysqli_error($conn) . "</p>";
-                                }
-                                mysqli_stmt_close($stmt_update);
-                            } else {
-                                $sql_insert = "INSERT INTO user (nama, alamat, no_hp, username, password) VALUES (?, ?, ?, ?, ?)";
-                                $stmt_insert = mysqli_prepare($conn, $sql_insert);
-                                mysqli_stmt_bind_param($stmt_insert, "sssss", $nama_form, $alamat_form, $no_hp_form, $username_form, $hashed_password);
-
-                                if (mysqli_stmt_execute($stmt_insert)) {
-                                    echo "<p class='message success'>Pengguna baru berhasil ditambahkan!</p>";
-                                    $edit_nama = '';
-                                    $edit_alamat = '';
-                                    $edit_no_hp = '';
-                                    $edit_username = '';
-                                    $edit_password = '';
-                                } else {
-                                    echo "<p class='message error'>Error menambahkan pengguna: " . mysqli_error($conn) . "</p>";
-                                }
-                                mysqli_stmt_close($stmt_insert);
-                            }
-                        }
-                    }
-
-                    if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
-                        $id_to_delete = intval($_GET['id']);
-
-                        $sql_delete = "DELETE FROM user WHERE id_user = ?";
-                        $stmt_delete = mysqli_prepare($conn, $sql_delete);
-                        mysqli_stmt_bind_param($stmt_delete, "i", $id_to_delete);
-
-                        if (mysqli_stmt_execute($stmt_delete)) {
-                            echo "<p class='message success'>Pengguna berhasil dihapus!</p>";
-                        } else {
-                            echo "<p class='message error'>Error menghapus pengguna: " . mysqli_error($conn) . "</p>";
-                        }
-                        mysqli_stmt_close($stmt_delete);
-                    }
-                    ?>
-
-                    <form action="" method="POST">
-                        <input type="hidden" name="id_user" value="<?php echo htmlspecialchars($edit_id_user); ?>">
-                        <input type="hidden" name="form_action_type" value="<?php echo htmlspecialchars($form_action_type); ?>">
-
-                        <label for="nama">Nama:</label>
-                        <input type="text" id="nama" name="nama" value="<?php echo htmlspecialchars($edit_nama); ?>" required>
-
-                        <label for="alamat">Alamat:</label>
-                        <input type="text" id="alamat" name="alamat" value="<?php echo htmlspecialchars($edit_alamat); ?>">
-
-                        <label for="no_hp">No. HP:</label>
-                        <input type="text" id="no_hp" name="no_hp" value="<?php echo htmlspecialchars($edit_no_hp); ?>">
-
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($edit_username); ?>" required>
-
-                        <label for="password">Password <?php echo ($form_action_type == 'update') ? '(Isi untuk mengubah)' : ''; ?>:</label>
-                        <input type="password" id="password" name="password" <?php echo ($form_action_type == 'add') ? 'required' : ''; ?>>
-
-                        <button type="submit" name="submit_button"><?php echo htmlspecialchars($form_button_text); ?></button>
-                    </form>
-
-                    <h3>Daftar Pengguna</h3>
-                    <?php
-                    $sql_select_all = "SELECT id_user, nama, alamat, no_hp, username, password FROM user ORDER BY id_user DESC";
-                    $result_all = mysqli_query($conn, $sql_select_all);
-
-                    if (mysqli_num_rows($result_all) > 0) {
-                        echo "<div class=table-wrap>";
-                        echo "<table>";
-                        echo "<thead><tr><th>ID</th><th>Nama</th><th>Alamat</th><th>No. HP</th><th>Username</th><th>Password (MD5)</th><th>Aksi</th></tr></thead>";
-                        echo "<tbody>";
-                        while ($row = mysqli_fetch_assoc($result_all)) {
-                            echo "<tr>";
-                            echo "<td>" . htmlspecialchars($row['id_user']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['nama']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['alamat']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['no_hp']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['password']) . "</td>";
-                            echo "<td>";
-                            echo "<a href='?action=edit&id=" . htmlspecialchars($row['id_user']) . "' class='action-link'>Edit</a>";
-                            echo "<a href='?action=delete&id=" . htmlspecialchars($row['id_user']) . "' class='action-link delete-link' onclick='return confirm(\"Apakah Anda yakin ingin menghapus pengguna ini?\");'>Hapus</a>";
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                        echo "</tbody>";
-                        echo "</table>";
-                        echo "</div>";
-                    } else {
-                        echo "<p>Tidak ada pengguna ditemukan.</p>";
-                    }
-
-                    mysqli_close($conn);
-                    ?>
-                </div>
-            </div>
-        </section>
-    </main>
+            switch ($page) {
+                case 'user':
+                    include 'dashboard_user.php';
+                    break;
+                case 'detail_pesanan':
+                    echo "<h2>Konten Detail Pesanan</h2><p>Ini adalah halaman untuk melihat detail pesanan.</p>";
+                    break;
+                case 'layanan':
+                    echo "<h2>Konten Layanan</h2><p>Ini adalah halaman untuk mengelola layanan.</p>";
+                    break;
+                case 'pesanan':
+                    echo "<h2>Konten Pesanan</h2><p>Ini adalah halaman untuk melihat daftar pesanan.</p>";
+                    break;
+                case 'informasi':
+                default: // Default atau jika ada parameter yang tidak dikenal
+                    echo "<h2>Selamat Datang di Dashboard!</h2><p>Pilih menu dari sidebar untuk melihat konten.</p>";
+                    break;
+            }
+            ?>
+        </div>
+    </div>
+    <?php mysqli_close($koneksi);?>
 </body>
-
 </html>
