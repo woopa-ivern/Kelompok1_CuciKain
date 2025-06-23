@@ -186,6 +186,7 @@
                     $result_all = mysqli_query($conn, $sql_select_all);
 
                     if (mysqli_num_rows($result_all) > 0) {
+                        echo "<div class=table-wrap>";
                         echo "<table>";
                         echo "<thead><tr><th>ID</th><th>Nama</th><th>Alamat</th><th>No. HP</th><th>Username</th><th>Password (MD5)</th><th>Aksi</th></tr></thead>";
                         echo "<tbody>";
@@ -205,6 +206,7 @@
                         }
                         echo "</tbody>";
                         echo "</table>";
+                        echo "</div>";
                     } else {
                         echo "<p>Tidak ada pengguna ditemukan.</p>";
                     }

@@ -38,7 +38,7 @@
             <section>
                 <div class="contents content-5 container">
                     <div class="wrapper">
-                        <form action="dashboard.php" method="post">
+                        <form action="dashboard_user.php" method="post">
                             <div class="login-container">
                                 <h2>Masuk</h2>
                             <br>
