@@ -1,18 +1,7 @@
 <?php
 // Pastikan koneksi database sudah ada atau include di sini jika dashboard.php tidak meng-include-nya
 // Jika dashboard.php sudah meng-include koneksi, Anda bisa menghapus bagian ini.
-$host = "localhost";
-$user = "root"; // Sesuaikan dengan username database Anda
-$pass = "";     // Sesuaikan dengan password database Anda
-$db   = "cuci_kain"; // Nama database yang Anda buat
-
-// Periksa apakah $koneksi sudah ada, jika tidak, buat koneksi baru
-if (!isset($koneksi)) {
-    $koneksi = mysqli_connect($host, $user, $pass, $db);
-    if (!$koneksi) {
-        die("Koneksi gagal: " . mysqli_connect_error());
-    }
-}
+include 'koneksi.php';
 
 
 // =====================================================================================================

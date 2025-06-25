@@ -1,15 +1,6 @@
 <?php
 // Bagian Koneksi Database
-$host = "localhost";
-$user = "root"; // Sesuaikan dengan username database Anda
-$pass = "";     // Sesuaikan dengan password database Anda
-$db   = "cuci_kain"; // Nama database yang Anda buat
-
-$koneksi = mysqli_connect($host, $user, $pass, $db);
-
-if (!$koneksi) {
-    die("Koneksi gagal: " . mysqli_connect_error());
-}
+include 'koneksi.php';
 
 // =====================================================================================================
 // Bagian Logika CRUD (PHP)
@@ -26,7 +17,7 @@ if (isset($_POST['aksi']) && $_POST['aksi'] == 'tambah') {
 
     if (mysqli_query($koneksi, $query_tambah)) {
         $pesan = "<script>alert('Data berhasil ditambahkan!');</script>";
-        header("Location: main.php"); // Redirect untuk menghindari resubmission form
+        header("Location: dashboard.php?page=layanan"); // Redirect untuk menghindari resubmission form
         exit();
     } else {
         $pesan = "<script>alert('Error: " . mysqli_error($koneksi) . "');</script>";
@@ -43,7 +34,7 @@ if (isset($_POST['aksi']) && $_POST['aksi'] == 'update') {
 
     if (mysqli_query($koneksi, $query_update)) {
         $pesan = "<script>alert('Data berhasil diupdate!');</script>";
-        header("Location: main.php");
+        header("Location: dashboard.php?page=layanan");
         exit();
     } else {
         $pesan = "<script>alert('Error: " . mysqli_error($koneksi) . "');</script>";
@@ -57,7 +48,7 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'hapus') {
 
     if (mysqli_query($koneksi, $query_hapus)) {
         $pesan = "<script>alert('Data berhasil dihapus!');</script>";
-        header("Location: main.php");
+        header("Location: dashboard.php?page=layanan");
         exit();
     } else {
         $pesan = "<script>alert('Error: " . mysqli_error($koneksi) . "');</script>";
@@ -110,8 +101,8 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'edit') {
                             <td><?php echo $row['id_layanan']; ?></td>
                             <td><?php echo $row['nama_layanan']; ?></td>
                             <td><?php echo number_format($row['harga'], 2, ',', '.'); ?></td> <td>
-                                <a href="main.php?aksi=edit&id_layanan=<?php echo $row['id_layanan']; ?>" class="btn btn-edit">Edit</a>
-                                <a href="main.php?aksi=hapus&id_layanan=<?php echo $row['id_layanan']; ?>" class="btn btn-delete" onclick="return confirm('Yakin ingin menghapus data ini?');">Hapus</a>
+                                <a href="dashboard.php?page=layanan&aksi=edit&id_layanan=<?php echo $row['id_layanan']; ?>" class="btn btn-edit">Edit</a>
+                                <a href="dashboard.php?page=layanan&aksi=hapus&id_layanan=<?php echo $row['id_layanan']; ?>" class="btn btn-delete" onclick="return confirm('Yakin ingin menghapus data ini?');">Hapus</a>
                             </td>
                         </tr>
                     <?php } ?>
@@ -130,7 +121,7 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'edit') {
         if (isset($_GET['aksi']) && $_GET['aksi'] == 'tambah_form') {
         ?>
             <h2>Tambah Layanan</h2>
-            <form action="main.php" method="POST">
+            <form action="dashboard_layanan.php" method="POST">
                 <input type="hidden" name="aksi" value="tambah">
 
                 <label for="nama_layanan">Nama Layanan:</label>
@@ -138,13 +129,13 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'edit') {
 
                 <label for="harga">Harga:</label>
                 <input type="number" step="0.01" id="harga" name="harga" required> <button type="submit">Tambah</button>
-                <a href="main.php" class="btn btn-cancel">Batal</a>
+                <a href="dashboard_layanan.php" class="btn btn-cancel">Batal</a>
             </form>
         <?php
         } elseif (isset($_GET['aksi']) && $_GET['aksi'] == 'edit' && $data_edit) {
         ?>
             <h2>Edit Layanan</h2>
-            <form action="main.php" method="POST">
+            <form action="dashboard_layanan.php" method="POST">
                 <input type="hidden" name="aksi" value="update">
                 <input type="hidden" name="id_layanan" value="<?php echo $data_edit['id_layanan']; ?>">
 
@@ -155,7 +146,7 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'edit') {
                 <input type="number" step="0.01" id="harga" name="harga" value="<?php echo $data_edit['harga']; ?>" required>
 
                 <button type="submit">Update</button>
-                <a href="main.php" class="btn btn-cancel">Batal</a>
+                <a href="dashboard_layanan.php" class="btn btn-cancel">Batal</a>
             </form>
         <?php
         }

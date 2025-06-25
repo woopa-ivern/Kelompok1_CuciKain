@@ -1,13 +1,15 @@
 <?php
-// koneksi.php
-$host = "localhost";
-$user = "root";
-$pass = "";
-$db   = "cuci_kain";
-$koneksi = mysqli_connect($host, $user, $pass, $db);
-if (!$koneksi) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+
+session_start();
+
+// Periksa apakah user sudah login dan apakah role-nya customer
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'user') {
+    // Jika belum login, atau bukan customer, redirect ke halaman login
+    header("Location: login.php");
+    exit();
 }
+// koneksi.php
+include 'koneksi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

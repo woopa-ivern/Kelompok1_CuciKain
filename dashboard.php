@@ -1,36 +1,48 @@
 <?php
-// koneksi.php
-$host = "localhost";
-$user = "root";
-$pass = "";
-$db   = "cuci_kain";
-$koneksi = mysqli_connect($host, $user, $pass, $db);
-if (!$koneksi) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+
+session_start();
+
+// Periksa apakah user sudah login dan apakah role-nya admin
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
+    // Jika belum login, atau bukan admin, redirect ke halaman login
+    header("Location: login.php");
+    exit();
 }
+// koneksi.php
+include 'koneksi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="images/Logo_CuciKain.png" type="image/x-icon">
     <title>Dashboard Aplikasi</title>
     <style>
         /* CSS Umum untuk Layout Dashboard */
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            display: flex; /* Menggunakan flexbox untuk layout sidebar dan konten */
-            min-height: 100vh; /* Pastikan tinggi minimal 100% viewport */
+            display: flex;
+            /* Menggunakan flexbox untuk layout sidebar dan konten */
+            min-height: 100vh;
+            /* Pastikan tinggi minimal 100% viewport */
             background-color: #f4f4f4;
         }
 
         .sidebar {
             width: 250px;
-            background-color: #28a7e2; /* Warna biru sidebar sesuai gambar */
+            background-color: #28a7e2;
+            /* Warna biru sidebar sesuai gambar */
             color: white;
             padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar-logo {
@@ -39,10 +51,13 @@ if (!$koneksi) {
         }
 
         .sidebar-logo img {
-            width: 100px; /* Sesuaikan ukuran logo */
+            width: 100px;
+            /* Sesuaikan ukuran logo */
             height: auto;
-            border-radius: 8px; /* Jika logo berupa kotak/gambar */
-            background-color: #fff; /* Latar belakang untuk logo seperti di gambar */
+            border-radius: 8px;
+            /* Jika logo berupa kotak/gambar */
+            background-color: #fff;
+            /* Latar belakang untuk logo seperti di gambar */
             padding: 10px;
         }
 
@@ -66,19 +81,22 @@ if (!$koneksi) {
 
         .sidebar ul li a:hover,
         .sidebar ul li a.active {
-            background-color: #1e87bb; /* Warna hover/active lebih gelap */
+            background-color: #1e87bb;
+            /* Warna hover/active lebih gelap */
         }
 
         .main-content {
-            flex-grow: 1; /* Mengisi sisa ruang */
+            flex-grow: 1;
+            /* Mengisi sisa ruang */
             padding: 20px;
             background-color: #f9f9f9;
         }
 
         /* Styling untuk konten yang dimuat (mirip dengan main.php sebelumnya) */
         .content-area {
-            max-width: 850px; /* Lebar konten utama */
-            margin: 0 auto; /* Tengah */
+            /* Lebar konten utama */
+            margin: 0 auto;
+            /* Tengah */
             background: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -86,7 +104,8 @@ if (!$koneksi) {
         }
 
         .content-area h2 {
-            text-align: left; /* Sesuaikan dengan gambar */
+            text-align: left;
+            /* Sesuaikan dengan gambar */
             color: #333;
             margin-bottom: 20px;
         }
@@ -98,13 +117,16 @@ if (!$koneksi) {
             margin-top: 20px;
         }
 
-        table, th, td {
+        table,
+        th,
+        td {
             border: 1px solid #ddd;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
-            text-align: left;
+            text-align: center;
         }
 
         th {
@@ -181,16 +203,19 @@ if (!$koneksi) {
         }
     </style>
 </head>
+
 <body>
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="images/Logo_CuciKain.png" alt="Logo"> </div>
+            <img src="images/Logo_CuciKain.png" alt="Logo">
+        </div>
         <ul>
-            <li><a href="dashboard.php?page=informasi" <?php if(!isset($_GET['page']) || $_GET['page'] == 'informasi') echo 'class="active"'; ?>>Informasi</a></li>
-            <li><a href="dashboard.php?page=user" <?php if(isset($_GET['page']) && $_GET['page'] == 'user') echo 'class="active"'; ?>>User</a></li>
-            <li><a href="dashboard.php?page=detail_pesanan" <?php if(isset($_GET['page']) && $_GET['page'] == 'detail_pesanan') echo 'class="active"'; ?>>Detail Pesanan</a></li>
-            <li><a href="dashboard.php?page=layanan" <?php if(isset($_GET['page']) && $_GET['page'] == 'layanan') echo 'class="active"'; ?>>Layanan</a></li>
-            <li><a href="dashboard.php?page=pesanan" <?php if(isset($_GET['page']) && $_GET['page'] == 'pesanan') echo 'class="active"'; ?>>Pesanan</a></li>
+            <li><a href="dashboard.php?page=informasi" <?php if (!isset($_GET['page']) || $_GET['page'] == 'informasi') echo 'class="active"'; ?>>Informasi</a></li>
+            <li><a href="dashboard.php?page=user" <?php if (isset($_GET['page']) && $_GET['page'] == 'user') echo 'class="active"'; ?>>User</a></li>
+            <li><a href="dashboard.php?page=detail_pesanan" <?php if (isset($_GET['page']) && $_GET['page'] == 'detail_pesanan') echo 'class="active"'; ?>>Detail Pesanan</a></li>
+            <li><a href="dashboard.php?page=layanan" <?php if (isset($_GET['page']) && $_GET['page'] == 'layanan') echo 'class="active"'; ?>>Layanan</a></li>
+            <li><a href="dashboard.php?page=pesanan" <?php if (isset($_GET['page']) && $_GET['page'] == 'pesanan') echo 'class="active"'; ?>>Pesanan</a></li>
+            <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
 
@@ -211,7 +236,7 @@ if (!$koneksi) {
                     include 'dashboard_layanan.php';
                     break;
                 case 'pesanan':
-                    echo "<h2>Konten Pesanan</h2><p>Ini adalah halaman untuk melihat daftar pesanan.</p>";
+                    include 'dashboard_pesanan.php';
                     break;
                 case 'informasi':
                 default: // Default atau jika ada parameter yang tidak dikenal
@@ -221,6 +246,7 @@ if (!$koneksi) {
             ?>
         </div>
     </div>
-    <?php mysqli_close($koneksi);?>
+    <?php mysqli_close($koneksi); ?>
 </body>
+
 </html>

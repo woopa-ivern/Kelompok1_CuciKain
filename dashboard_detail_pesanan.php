@@ -1,8 +1,6 @@
 <?php
 // Bagian Koneksi Database
-// KODE KONEKSI DATABASE DI SINI DIHAPUS karena sudah ada di dashboard.php
-// Variabel $koneksi akan otomatis tersedia karena file ini di-include oleh dashboard.php
-
+include 'koneksi.php';
 // =====================================================================================================
 // Bagian Logika CRUD (PHP)
 // =====================================================================================================
@@ -138,7 +136,7 @@ echo $pesan;
 if (isset($_GET['aksi']) && $_GET['aksi'] == 'tambah_form') {
 ?>
     <h2>Form Tambah Detail Pesanan</h2>
-    <form action="dashboard.php?page=detail_pesanan" method="POST">
+    <form action="dashboard_detail_pesanan" method="POST">
         <input type="hidden" name="aksi" value="tambah">
 
         <label for="id_pesanan">ID Pesanan:</label>
@@ -170,7 +168,7 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'tambah_form') {
 } elseif (isset($_GET['aksi']) && $_GET['aksi'] == 'edit' && $data_edit) {
 ?>
     <h2>Form Edit Detail Pesanan</h2>
-    <form action="dashboard.php?page=detail_pesanan" method="POST">
+    <form action="dashboard_detail_pesanan.php" method="POST">
         <input type="hidden" name="aksi" value="update">
         <input type="hidden" name="id_detail" value="<?php echo $data_edit['id_detail']; ?>">
 
