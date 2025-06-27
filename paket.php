@@ -21,8 +21,8 @@
                                 <h4>Keterangan</h4>
                                 <ul class="desc">
                                     <li class="list-desc">Reguler : 2 - 3 hari selesai, Cuci + Setrika</li>
-                                    <li class="list-desc">Express : 1 hari selesai, lebih mahal sedikit</li>
-                                    <li class="list-desc">Super Express : Selesai dalam 4–6 jam</li>
+                                    <li class="list-desc">Express : 1 hari selesai, lebih mahal sedikit<p style="margin-bottom: 0px;font-size: 17px;" class="price">+Rp 5.000</p></li>
+                                    <li class="list-desc">Super Express : Selesai dalam 4–6 jam <p style="margin-bottom: 0px;font-size: 17px;" class="price">+Rp 10.000</p></li>
                                 </ul>
                                 <a href="kontak.php">Pesan Sekarang</a>
                             </div>
@@ -44,22 +44,7 @@
                                 <a href="kontak.php">Pesan Sekarang</a>
                             </div>
                         </li>
-                        <li class="list-item">
-                            <div class="inner-wrapper">
-                                <img src="images/iron.png">
-                                <h3>Paket Cuci Setrika</h3>
-                                <p>Layanan lengkap dari cuci hingga setrika,
-                                    menjamin pakaian tetap harum dan rapi.
-                                </p>
-                                <p class="price">Rp 20.000,-</p>
-                                <h4>Keterangan</h4>
-                                <ul class="desc">
-                                    <li class="list-desc">Dicuci, dikeringkan, dan disetrika sampai rapi.</li>
-                                    <li class="list-desc">Layanan ini paling umum dipakai.</li>
-                                </ul>
-                                <a href="kontak.php">Pesan Sekarang</a>
-                            </div>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
