@@ -36,7 +36,7 @@ if (isset($_POST['aksi']) && $_POST['aksi'] == 'update') {
     $query_update = "UPDATE pesanan SET id_user='$id_user', tanggal='$tanggal', status='$status' WHERE id_pesanan=$id_pesanan";
 
     if (mysqli_query($koneksi, $query_update)) {
-        // $pesan = "<script>alert('Data berhasil diupdate!');</script>";
+        $pesan = "<script>alert('Data berhasil diupdate!');</script>";
         header("Location: dashboard.php?page=pesanan"); // Redirect ke halaman pesanan
         exit(); // PENTING
     } else {
@@ -47,10 +47,10 @@ if (isset($_POST['aksi']) && $_POST['aksi'] == 'update') {
 // --- Hapus Data (Delete) ---
 if (isset($_GET['aksi']) && $_GET['aksi'] == 'hapus' && isset($_GET['id_pesanan'])) {
     $id_pesanan = $_GET['id_pesanan'];
-    $query_hapus = "DELETE FROM pesanan WHERE id_pesanan=$id_pesanan";
+    $query_hapus = "UPDATE pesanan SET is_deleted = 1, status = 'Dibatalkan' WHERE id_pesanan=$id_pesanan";
 
     if (mysqli_query($koneksi, $query_hapus)) {
-        // $pesan = "<script>alert('Data berhasil dihapus!');</script>";
+        $pesan = "<script>alert('Data berhasil dihapus!');</script>";
         header("Location: dashboard.php?page=pesanan"); // Redirect ke halaman pesanan
         exit(); // PENTING
     } else {
@@ -62,7 +62,8 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'hapus' && isset($_GET['id_pesanan'
 // Join dengan tabel user untuk menampilkan nama user
 $query_read = "SELECT p.*, u.nama AS nama_user
                FROM pesanan p
-               JOIN user u ON p.id_user = u.id_user
+               JOIN user u ON p.id_user = u.id_user 
+               WHERE p.is_deleted = 0
                ORDER BY p.id_pesanan DESC";
 $result_read = mysqli_query($koneksi, $query_read);
 

@@ -1,15 +1,54 @@
 <?php
 
-session_start();
+session_start(); // Mulai sesi paling awal
 
 // Periksa apakah user sudah login dan apakah role-nya admin
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
     // Jika belum login, atau bukan admin, redirect ke halaman login
     header("Location: login.php");
-    exit();
+    exit(); // PENTING: Selalu exit setelah header redirect untuk menghentikan eksekusi skrip
 }
+
 // koneksi.php
-include 'koneksi.php';
+include 'koneksi.php'; // Include koneksi setelah sesi dan pengecekan login
+
+// =====================================================================================================
+// Logika untuk include file berdasarkan parameter 'page'
+// Menggunakan Output Buffering untuk mencegah "headers already sent" error
+// =====================================================================================================
+
+$page = isset($_GET['page']) ? $_GET['page'] : 'informasi'; // Default ke informasi jika tidak ada parameter
+$current_page_content = ''; // Variabel untuk menampung HTML dari file yang di-include
+
+// Mulai output buffering sebelum meng-include file yang mungkin menghasilkan output atau redirect
+ob_start();
+
+switch ($page) {
+    case 'user':
+        include 'dashboard_user.php'; // Pastikan file ini TIDAK memiliki <html>, <head>, <body>, atau mysqli_close()
+        break;
+    case 'detail_pesanan':
+        include 'dashboard_detail_pesanan.php'; // Pastikan file ini TIDAK memiliki <html>, <head>, <body>, atau mysqli_close()
+        break;
+    case 'layanan':
+        include 'dashboard_layanan.php'; // Pastikan file ini TIDAK memiliki <html>, <head>, <body>, atau mysqli_close()
+        break;
+    case 'pesanan':
+        include 'dashboard_pesanan.php'; // Pastikan file ini TIDAK memiliki <html>, <head>, <body>, atau mysqli_close()
+        break;
+    case 'informasi':
+    default: // Default atau jika ada parameter yang tidak dikenal
+        echo "<h2>Selamat Datang di Dashboard!</h2><p>Pilih menu dari sidebar untuk melihat konten.</p>";
+        break;
+}
+
+// Ambil semua output yang telah di-buffer dan simpan ke variabel
+$current_page_content = ob_get_clean();
+
+// =====================================================================================================
+// Akhir Logika PHP - Selanjutnya adalah HTML
+// =====================================================================================================
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
