@@ -5,6 +5,141 @@ include 'koneksi.php';
 // Bagian Logika CRUD (PHP)
 // =====================================================================================================
 
+// INI ADALAH FUNGSI AGREGAT
+$query_agregat_bulanan = "
+    SELECT
+        tahun_pesanan AS tahun,
+        bulan_pesanan AS bulan,
+        SUM(subtotal) AS total_bulanan,
+        AVG(subtotal) AS rata_rata_subtotal_item_bulanan,
+        MAX(subtotal) AS maks_subtotal_item_bulanan,
+        MIN(subtotal) AS min_subtotal_item_bulanan,
+        COUNT(id_detail) AS jumlah_item_detail_pesanan_bulanan
+    FROM
+        vw_laporan_detail_pesanan
+    GROUP BY
+        tahun_pesanan, bulan_pesanan
+    ORDER BY
+        tahun_pesanan ASC, bulan_pesanan ASC;
+";
+
+$result_agregat = mysqli_query($koneksi, $query_agregat_bulanan);
+
+$data_laporan = [];
+$total_keseluruhan = 0;
+$jumlah_bulan_dengan_data = 0; // Untuk menghitung berapa banyak bulan yang ada datanya
+$total_subtotal_untuk_avg_global = 0; // Untuk menghitung SUM dari semua subtotal (untuk AVG global)
+$count_detail_global = 0; // Untuk menghitung COUNT dari semua id_detail (untuk COUNT global)
+
+$max_subtotal_global = 0;
+$min_subtotal_global = PHP_INT_MAX; // Nilai awal yang sangat besar
+
+if (mysqli_num_rows($result_agregat) > 0) {
+    while ($row = mysqli_fetch_assoc($result_agregat)) {
+        $nama_bulan = DateTime::createFromFormat('!m', $row['bulan'])->format('F');
+        $periode = $nama_bulan . " " . $row['tahun'];
+
+        $data_laporan[] = [
+            'periode'                             => $periode,
+            'total_bulanan'                       => $row['total_bulanan'],
+            'rata_rata_subtotal_item_bulanan'     => $row['rata_rata_subtotal_item_bulanan'],
+            'maks_subtotal_item_bulanan'          => $row['maks_subtotal_item_bulanan'],
+            'min_subtotal_item_bulanan'           => $row['min_subtotal_item_bulanan'],
+            'jumlah_item_detail_pesanan_bulanan'  => $row['jumlah_item_detail_pesanan_bulanan']
+        ];
+
+        // Untuk agregat keseluruhan (global)
+        $total_keseluruhan += $row['total_bulanan'];
+        $jumlah_bulan_dengan_data++;
+        $total_subtotal_untuk_avg_global += $row['total_bulanan']; // Mengumpulkan total subtotal dari setiap bulan untuk rata-rata global
+        
+        // Memperbarui MAX subtotal global
+        if ($row['maks_subtotal_item_bulanan'] > $max_subtotal_global) {
+            $max_subtotal_global = $row['maks_subtotal_item_bulanan'];
+        }
+
+        // Memperbarui MIN subtotal global
+        if ($row['min_subtotal_item_bulanan'] < $min_subtotal_global) {
+            $min_subtotal_global = $row['min_subtotal_item_bulanan'];
+        }
+        
+        $count_detail_global += $row['jumlah_item_detail_pesanan_bulanan'];
+    }
+
+    // Hitung rata-rata keseluruhan setelah loop selesai
+    // Rata-rata global dihitung dari total_keseluruhan dibagi jumlah bulan yang memiliki data
+    $avg_keseluruhan = ($jumlah_bulan_dengan_data > 0) ? ($total_keseluruhan / $jumlah_bulan_dengan_data) : 0;
+
+} else {
+    // Handle case where no data is found for min_subtotal_global
+    $min_subtotal_global = 0;
+}
+
+// Tutup koneksi database
+?>
+
+<h2>Laporan Agregat Penghasilan Pesanan</h2>
+
+<?php if (!empty($data_laporan)) { ?>
+    <h3>Ringkasan Agregat Keseluruhan:</h3>
+    <table border="1">
+        <tr>
+            <th>Metrik</th>
+            <th>Nilai</th>
+        </tr>
+        <tr>
+            <td>Total Penghasilan Keseluruhan (SUM)</td>
+            <td><strong>Rp. <?php echo number_format($total_keseluruhan, 2, ',', '.'); ?></strong></td>
+        </tr>
+        <tr>
+            <td>Rata-rata Penghasilan per Bulan (AVG)</td>
+            <td><strong>Rp. <?php echo number_format($avg_keseluruhan, 2, ',', '.'); ?></strong></td>
+        </tr>
+        <tr>
+            <td>Subtotal Item Tertinggi (MAX)</td>
+            <td><strong>Rp. <?php echo number_format($max_subtotal_global, 2, ',', '.'); ?></strong></td>
+        </tr>
+        <tr>
+            <td>Subtotal Item Terendah (MIN)</td>
+            <td><strong>Rp. <?php echo number_format($min_subtotal_global, 2, ',', '.'); ?></strong></td>
+        </tr>
+        <tr>
+            <td>Total Jumlah Item Detail Pesanan (COUNT)</td>
+            <td><strong><?php echo number_format($count_detail_global, 0, ',', '.'); ?></strong></td>
+        </tr>
+    </table>
+
+    <h3>Detail Agregat per Bulan:</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Bulan/Tahun</th>
+                <th>Total Penghasilan (SUM)</th>
+                <th>Rata-rata Subtotal Item (AVG)</th>
+                <th>Subtotal Item Tertinggi (MAX)</th>
+                <th>Subtotal Item Terendah (MIN)</th>
+                <th>Jumlah Item Detail Pesanan (COUNT)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($data_laporan as $data) { ?>
+                <tr>
+                    <td><?php echo $data['periode']; ?></td>
+                    <td>Rp. <?php echo number_format($data['total_bulanan'], 2, ',', '.'); ?></td>
+                    <td>Rp. <?php echo number_format($data['rata_rata_subtotal_item_bulanan'], 2, ',', '.'); ?></td>
+                    <td>Rp. <?php echo number_format($data['maks_subtotal_item_bulanan'], 2, ',', '.'); ?></td>
+                    <td>Rp. <?php echo number_format($data['min_subtotal_item_bulanan'], 2, ',', '.'); ?></td>
+                    <td><?php echo number_format($data['jumlah_item_detail_pesanan_bulanan'], 0, ',', '.'); ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <p>Tidak ada data penghasilan yang tersedia untuk laporan.</p>
+<?php }
+// FUNGSI AGREGAT
+
+
 $pesan = ''; // Variabel untuk menyimpan pesan notifikasi
 
 // --- Tambah Data (Create) ---

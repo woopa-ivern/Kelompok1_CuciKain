@@ -207,7 +207,7 @@ include 'koneksi.php';
 <body>
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="images/Logo_CuciKain.png" alt="Logo">
+            <a href="dashboard.php"><img src="images/Logo_CuciKain.png" alt="Logo"></a>
         </div>
         <ul>
             <li><a href="dashboard.php?page=informasi" <?php if (!isset($_GET['page']) || $_GET['page'] == 'informasi') echo 'class="active"'; ?>>Informasi</a></li>
