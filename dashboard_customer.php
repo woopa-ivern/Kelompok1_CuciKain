@@ -119,7 +119,7 @@ mysqli_close($koneksi);
 
         .sidebar ul li a:hover,
         .sidebar ul li a.active {
-            background-color: ##28a7e2;
+            background-color: #28a7e2;
         }
 
         .main-content {

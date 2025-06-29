@@ -76,7 +76,7 @@ $current_page_content = ob_get_clean();
         }
 
         .sidebar {
-            width: 250px;
+            min-width: 250px;
             background-color: #28a7e2;
             /* Warna biru sidebar sesuai gambar */
             color: white;
@@ -254,7 +254,8 @@ $current_page_content = ob_get_clean();
             <li><a href="dashboard.php?page=detail_pesanan" <?php if (isset($_GET['page']) && $_GET['page'] == 'detail_pesanan') echo 'class="active"'; ?>>Detail Pesanan</a></li>
             <li><a href="dashboard.php?page=layanan" <?php if (isset($_GET['page']) && $_GET['page'] == 'layanan') echo 'class="active"'; ?>>Layanan</a></li>
             <li><a href="dashboard.php?page=pesanan" <?php if (isset($_GET['page']) && $_GET['page'] == 'pesanan') echo 'class="active"'; ?>>Pesanan</a></li>
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="dashboard.php?page=laporan" <?php if (isset($_GET['page']) && $_GET['page'] == 'laporan') echo 'class="active"'; ?>>Laporan</a></li>
+            <li><a href="logout.php" class="logout-button" onclick="return confirm('Yakin ingin logout?');">Logout</a></li>
         </ul>
     </div>
 
@@ -276,6 +277,9 @@ $current_page_content = ob_get_clean();
                     break;
                 case 'pesanan':
                     include 'dashboard_pesanan.php';
+                    break;
+                case 'laporan':
+                    include 'dashboard_laporan.php';
                     break;
                 case 'informasi':
                 default: // Default atau jika ada parameter yang tidak dikenal

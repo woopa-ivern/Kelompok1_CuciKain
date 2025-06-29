@@ -11,7 +11,7 @@
 }
 
 .content-4 .list-item {
-    width: calc(100% / 3.3);
+    width: calc(100% / 2);
     margin: 0 auto;
 }
 
@@ -29,6 +29,7 @@
     flex-direction: column;
     justify-content: space-between;
     transition: 0.3s ease-in-out;
+    margin: 10px 20px;
 }
 
 .content-4 .inner-wrapper:hover {

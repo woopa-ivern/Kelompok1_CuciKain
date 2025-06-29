@@ -13,7 +13,7 @@
                             <input type="password" placeholder="Password" name="password" required>
 
                             <div class="paket">
-                                <span>Belum punya akun? </span><a href="paket.php">Daftar</a>
+                                <span>Belum punya akun? </span><a href="daftar.php">Daftar</a>
                             </div>
 
                             <button class="login-btn">Login</button>
