@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 27, 2025 at 01:03 PM
+-- Generation Time: Jun 30, 2025 at 10:28 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,7 +45,7 @@ INSERT INTO `detail_pesanan` (`id_detail`, `id_pesanan`, `id_layanan`, `jumlah`,
 (5, 5, 1, 12.00, 240000.00),
 (6, 4, 2, 0.49, 12250.00),
 (7, 3, 1, 1.30, 26000.00),
-(8, 2, 1, 1.00, 20000.00);
+(10, 2, 1, 0.69, 13800.00);
 
 -- --------------------------------------------------------
 
@@ -79,20 +79,21 @@ CREATE TABLE `pesanan` (
   `id_pesanan` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `tanggal` date NOT NULL,
-  `status` varchar(50) DEFAULT 'Menunggu'
+  `status` varchar(50) DEFAULT 'Menunggu',
+  `is_deleted` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pesanan`
 --
 
-INSERT INTO `pesanan` (`id_pesanan`, `id_user`, `tanggal`, `status`) VALUES
-(1, 6, '2025-06-25', 'Selesai'),
-(2, 6, '2025-06-25', 'Diproses'),
-(3, 6, '2025-06-25', 'Diproses'),
-(4, 1, '2025-06-25', 'Dibatalkan'),
-(5, 13, '2025-07-25', 'Diproses'),
-(6, 12, '2025-08-12', 'Diproses');
+INSERT INTO `pesanan` (`id_pesanan`, `id_user`, `tanggal`, `status`, `is_deleted`) VALUES
+(1, 6, '2025-06-25', 'Selesai', 0),
+(2, 6, '2025-06-25', 'Diproses', 0),
+(3, 6, '2025-06-25', 'Diproses', 0),
+(4, 1, '2025-06-25', 'Dibatalkan', 1),
+(5, 13, '2025-07-25', 'Diproses', 0),
+(6, 12, '2025-08-12', 'Diproses', 0);
 
 -- --------------------------------------------------------
 
@@ -188,7 +189,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `layanan`
