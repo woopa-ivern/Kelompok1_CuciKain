@@ -82,47 +82,47 @@ if ($result_agregat_global && mysqli_num_rows($result_agregat_global) > 0) {
 <?php // include 'header.php'; // Header bisa diinclude di dashboard.php atau di sini ?>
 
 <main>
-    <h2>Laporan Agregat Penghasilan Pesanan</h2>
+    <h2>Laporan Bulanan Laundry CuciKain</h2>
 
     <?php if (!empty($data_laporan)) { ?>
-        <h3>Ringkasan Agregat Keseluruhan:</h3>
+        <h3>Laporan Agregat Keseluruhan:</h3>
         <table border="1">
             <tr>
-                <th>Metrik</th>
+                <th>Keterangan</th>
                 <th>Nilai</th>
             </tr>
             <tr>
-                <td>Total Penghasilan Keseluruhan (SUM)</td>
+                <td>Total Penghasilan Keseluruhan</td>
                 <td><strong>Rp. <?php echo number_format($total_keseluruhan, 2, ',', '.'); ?></strong></td>
             </tr>
             <tr>
-                <td>Rata-rata Penghasilan per Bulan (AVG)</td>
+                <td>Rata-rata Penghasilan per Bulan</td>
                 <td><strong>Rp. <?php echo number_format($avg_keseluruhan, 2, ',', '.'); ?></strong></td>
             </tr>
             <tr>
-                <td>Subtotal Item Tertinggi (MAX)</td>
+                <td>Subtotal Tertinggi</td>
                 <td><strong>Rp. <?php echo number_format($max_subtotal_global, 2, ',', '.'); ?></strong></td>
             </tr>
             <tr>
-                <td>Subtotal Item Terendah (MIN)</td>
+                <td>Subtotal Terendah</td>
                 <td><strong>Rp. <?php echo number_format($min_subtotal_global, 2, ',', '.'); ?></strong></td>
             </tr>
             <tr>
-                <td>Total Jumlah Item Detail Pesanan (COUNT)</td>
+                <td>Total Jumlah Detail Pesanan</td>
                 <td><strong><?php echo number_format($count_detail_global, 0, ',', '.'); ?></strong></td>
             </tr>
         </table>
 
-        <h3>Detail Agregat per Bulan:</h3>
+        <h3>Detail Laporan per Bulan:</h3>
         <table border="1">
             <thead>
                 <tr>
                     <th>Bulan/Tahun</th>
-                    <th>Total Penghasilan (SUM)</th>
-                    <th>Rata-rata Subtotal Item (AVG)</th>
-                    <th>Subtotal Item Tertinggi (MAX)</th>
-                    <th>Subtotal Item Terendah (MIN)</th>
-                    <th>Jumlah Item Detail Pesanan (COUNT)</th>
+                    <th>Total Penghasilan</th>
+                    <th>Rata-rata Subtotal</th>
+                    <th>Subtotal Tertinggi</th>
+                    <th>Subtotal Terendah</th>
+                    <th>Jumlah Detail Pesanan</th>
                 </tr>
             </thead>
             <tbody>
