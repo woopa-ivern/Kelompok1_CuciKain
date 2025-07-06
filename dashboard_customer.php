@@ -24,22 +24,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 // --- Ambil data status pesanan untuk pelanggan yang sedang login ---
 // Perbaikan: Menghitung SUM dari subtotal di detail_pesanan
 $query_status_pesanan = "
-    SELECT
+     SELECT
         p.id_pesanan,
-        u.nama AS nama_pelanggan,
         p.tanggal,
-        p.status AS status_pesanan, -- Menggunakan 'status' dari tabel pesanan
-        SUM(dp.subtotal) AS total_harga_dihitung
+        p.status AS status_pesanan,
+        fn_get_total_harga_pesanan(p.id_pesanan) AS total_harga
     FROM
         pesanan p
-    JOIN
-        user u ON p.id_user = u.id_user
-    LEFT JOIN
-        detail_pesanan dp ON p.id_pesanan = dp.id_pesanan
     WHERE
-        p.id_user = '$id_pelanggan_login'
-    GROUP BY
-        p.id_pesanan, u.nama, p.tanggal, p.status
+        p.id_user = '$id_pelanggan_login' AND p.is_deleted = 0
     ORDER BY
         p.tanggal DESC, p.id_pesanan DESC;
 ";
@@ -215,7 +208,7 @@ mysqli_close($koneksi);
                             <tr>
                                 <td><?php echo htmlspecialchars($row['id_pesanan']); ?></td>
                                 <td><?php echo htmlspecialchars($row['tanggal']); ?></td>
-                                <td>Rp. <?php echo number_format($row['total_harga_dihitung'] ?? 0, 2, ',', '.'); ?></td>
+                                <td>Rp. <?php echo number_format($row['total_harga'] ?? 0, 2, ',', '.'); ?></td>
                                 <td><?php echo htmlspecialchars($row['status_pesanan']); ?></td>
                             </tr>
                         <?php } ?>

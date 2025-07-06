@@ -121,15 +121,19 @@ if (isset($_GET['aksi']) && $_GET['aksi'] == 'hapus' && isset($_GET['id_detail']
 }
 
 // --- Ambil Data untuk Ditampilkan (Read) ---
-// MODIFIKASI: Mengurutkan berdasarkan tanggal_pesanan secara ascending
-$query_read = "SELECT * FROM vw_laporan_detail_pesanan ORDER BY tanggal_pesanan ASC, id_detail ASC"; // Urutkan berdasarkan tanggal, lalu id_detail jika tanggalnya sama
+// PENJELASAN: Query ini secara efisien menggunakan VIEW vw_laporan_detail_pesanan.
+// VIEW ini sudah menggabungkan tabel detail_pesanan, pesanan, dan layanan.
+// Pengurutan (ORDER BY) pada tanggal_pesanan juga akan dioptimalkan oleh index `idx_pesanan_tanggal` yang ada pada tabel `pesanan`.
+$query_read = "SELECT * FROM vw_laporan_detail_pesanan ORDER BY tanggal_pesanan ASC, id_detail ASC";
 $result_read = mysqli_query($koneksi, $query_read);
 
 // --- Ambil Data untuk Form Edit ---
 $data_edit = null;
 if (isset($_GET['aksi']) && $_GET['aksi'] == 'edit' && isset($_GET['id_detail'])) {
     $id_edit = $_GET['id_detail'];
-    // Untuk edit, kita masih mengambil dari tabel detail_pesanan karena manipulasi dilakukan di sana.
+    // PENJELASAN: Untuk form edit, kita tetap mengambil dari tabel asli `detail_pesanan`.
+    // Ini karena kita memerlukan ID asli (id_pesanan, id_layanan) untuk mengisi nilai default pada form <select>.
+    // Menggunakan VIEW di sini kurang efisien karena VIEW tidak selalu dapat diupdate dan kita butuh data mentahnya.
     $query_edit = "SELECT * FROM detail_pesanan WHERE id_detail=?";
     $stmt_edit = mysqli_prepare($koneksi, $query_edit);
     if ($stmt_edit === false) {
@@ -181,7 +185,7 @@ echo $pesan;
 <head>
     <title>Manajemen Detail Pesanan</title>
     <style>
-        /* Contoh CSS sederhana untuk tampilan tabel dan form */
+        /* ... CSS Anda tidak berubah ... */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -294,9 +298,7 @@ echo $pesan;
             if (layananSelect && jumlahInput) {
                 layananSelect.addEventListener('change', calculateSubtotal);
                 jumlahInput.addEventListener('input', calculateSubtotal);
-
-                // Panggil sekali saat load form edit untuk mengisi subtotal awal
-                // Cek jika ini halaman edit dan ada data_edit
+                
                 <?php if ($data_edit): ?>
                     calculateSubtotal();
                 <?php endif; ?>
@@ -306,9 +308,6 @@ echo $pesan;
 </head>
 
 <body>
-
-    <?php // include 'header.php'; // Header bisa diinclude di dashboard.php atau di sini 
-    ?>
 
     <main>
         <h2>Manajemen Detail Pesanan</h2>
@@ -321,7 +320,6 @@ echo $pesan;
                 <tr>
                     <th>ID Detail</th>
                     <th>ID Pesanan</th>
-                    <th>ID Layanan</th>
                     <th>Tanggal Pesanan</th>
                     <th>Nama Layanan</th>
                     <th>Jumlah</th>
@@ -333,12 +331,11 @@ echo $pesan;
                 <?php if (mysqli_num_rows($result_read) > 0) { ?>
                     <?php while ($row = mysqli_fetch_assoc($result_read)) { ?>
                         <tr>
-                            <td><?php echo $row['id_detail']; ?></td>
-                            <td><?php echo $row['id_pesanan']; ?></td>
-                            <td><?php echo $row['id_layanan']; ?></td>
-                            <td><?php echo $row['tanggal_pesanan']; ?></td>
-                            <td><?php echo $row['nama_layanan']; ?></td>
-                            <td><?php echo $row['jumlah']; ?></td>
+                            <td><?php echo htmlspecialchars($row['id_detail']); ?></td>
+                            <td><?php echo htmlspecialchars($row['id_pesanan']); ?></td>
+                            <td><?php echo htmlspecialchars($row['tanggal_pesanan']); ?></td>
+                            <td><?php echo htmlspecialchars($row['nama_layanan']); ?></td>
+                            <td><?php echo htmlspecialchars($row['jumlah']); ?></td>
                             <td>Rp. <?php echo number_format($row['subtotal'], 2, ',', '.'); ?></td>
                             <td>
                                 <a href="dashboard.php?page=detail_pesanan&aksi=edit&id_detail=<?php echo $row['id_detail']; ?>" class="btn btn-edit">Edit</a>
@@ -348,7 +345,7 @@ echo $pesan;
                     <?php } ?>
                 <?php } else { ?>
                     <tr>
-                        <td colspan="8">Tidak ada data.</td>
+                        <td colspan="7">Tidak ada data.</td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -357,65 +354,30 @@ echo $pesan;
 
         <?php
         // Tampilkan form tambah atau edit berdasarkan parameter 'aksi'
-        if (isset($_GET['aksi']) && $_GET['aksi'] == 'tambah_form') {
+        if (isset($_GET['aksi']) && ($_GET['aksi'] == 'tambah_form' || $_GET['aksi'] == 'edit')) {
+            $is_edit_mode = (isset($_GET['aksi']) && $_GET['aksi'] == 'edit' && $data_edit);
         ?>
-            <h2>Form Tambah Detail Pesanan Baru</h2>
+            <h2><?php echo $is_edit_mode ? 'Form Edit Detail Pesanan' : 'Form Tambah Detail Pesanan Baru'; ?></h2>
             <form action="dashboard.php?page=detail_pesanan" method="POST">
-                <input type="hidden" name="aksi" value="tambah">
+                <input type="hidden" name="aksi" value="<?php echo $is_edit_mode ? 'update' : 'tambah'; ?>">
+                <?php if ($is_edit_mode) { ?>
+                    <input type="hidden" name="id_detail" value="<?php echo $data_edit['id_detail']; ?>">
+                <?php } ?>
 
                 <label for="id_pesanan">ID Pesanan:</label>
                 <select id="id_pesanan" name="id_pesanan" required>
                     <option value="">Pilih Pesanan</option>
                     <?php
-                    if (mysqli_num_rows($result_pesanan_tanpa_detail) > 0) {
-                        while ($p = mysqli_fetch_assoc($result_pesanan_tanpa_detail)) { ?>
-                            <option value="<?php echo $p['id_pesanan']; ?>">ID: <?php echo $p['id_pesanan']; ?> (<?php echo $p['tanggal']; ?>)</option>
-                        <?php }
-                    } else { ?>
-                        <option value="" disabled>Tidak ada pesanan yang belum memiliki detail.</option>
-                    <?php } ?>
-                </select>
-
-                <label for="id_layanan">Layanan:</label>
-                <select id="id_layanan" name="id_layanan" required>
-                    <option value="">Pilih Layanan</option>
-                    <?php
-                    if ($result_layanan) {
-                        mysqli_data_seek($result_layanan, 0); // Reset pointer
-                        while ($l = mysqli_fetch_assoc($result_layanan)) { ?>
-                            <option value="<?php echo $l['id_layanan']; ?>"><?php echo $l['nama_layanan']; ?></option>
-                    <?php }
-                    }
-                    ?>
-                </select>
-
-                <label for="jumlah">Jumlah (Kg/Pcs):</label>
-                <input type="number" step="0.01" id="jumlah" name="jumlah" required>
-
-                <label for="subtotal">Subtotal:</label>
-                <input type="number" step="0.01" id="subtotal" name="subtotal" readonly>
-
-                <button type="submit">Tambah</button>
-                <a href="dashboard.php?page=detail_pesanan" class="btn btn-cancel">Batal</a>
-            </form>
-        <?php
-        } elseif (isset($_GET['aksi']) && $_GET['aksi'] == 'edit' && $data_edit) {
-            // Form Edit
-        ?>
-            <h2>Form Edit Detail Pesanan</h2>
-            <form action="dashboard.php?page=detail_pesanan" method="POST">
-                <input type="hidden" name="aksi" value="update">
-                <input type="hidden" name="id_detail" value="<?php echo $data_edit['id_detail']; ?>">
-
-                <label for="id_pesanan">ID Pesanan:</label>
-                <select id="id_pesanan" name="id_pesanan" required>
-                    <option value="">Pilih Pesanan</option>
-                    <?php
-                    if ($result_pesanan_all) {
-                        mysqli_data_seek($result_pesanan_all, 0);
-                        while ($p = mysqli_fetch_assoc($result_pesanan_all)) { ?>
-                            <option value="<?php echo $p['id_pesanan']; ?>" <?php if ($p['id_pesanan'] == $data_edit['id_pesanan']) echo 'selected'; ?>>ID: <?php echo $p['id_pesanan']; ?> (<?php echo $p['tanggal']; ?>)</option>
-                    <?php }
+                    // Jika mode edit, tampilkan semua pesanan. Jika mode tambah, tampilkan hanya yang belum punya detail.
+                    $result_pesanan_for_form = $is_edit_mode ? $result_pesanan_all : $result_pesanan_tanpa_detail;
+                    if ($result_pesanan_for_form && mysqli_num_rows($result_pesanan_for_form) > 0) {
+                        mysqli_data_seek($result_pesanan_for_form, 0); // Reset pointer
+                        while ($p = mysqli_fetch_assoc($result_pesanan_for_form)) {
+                            $selected = ($is_edit_mode && $p['id_pesanan'] == $data_edit['id_pesanan']) ? 'selected' : '';
+                            echo "<option value='{$p['id_pesanan']}' {$selected}>ID: {$p['id_pesanan']} ({$p['tanggal']})</option>";
+                        }
+                    } elseif (!$is_edit_mode) {
+                        echo '<option value="" disabled>Tidak ada pesanan baru.</option>';
                     }
                     ?>
                 </select>
@@ -425,30 +387,28 @@ echo $pesan;
                     <option value="">Pilih Layanan</option>
                     <?php
                     if ($result_layanan) {
-                        mysqli_data_seek($result_layanan, 0);
-                        while ($l = mysqli_fetch_assoc($result_layanan)) { ?>
-                            <option value="<?php echo $l['id_layanan']; ?>" <?php if ($l['id_layanan'] == $data_edit['id_layanan']) echo 'selected'; ?>><?php echo $l['nama_layanan']; ?></option>
-                    <?php }
+                        mysqli_data_seek($result_layanan, 0); // Reset pointer
+                        while ($l = mysqli_fetch_assoc($result_layanan)) {
+                            $selected = ($is_edit_mode && $l['id_layanan'] == $data_edit['id_layanan']) ? 'selected' : '';
+                            echo "<option value='{$l['id_layanan']}' {$selected}>" . htmlspecialchars($l['nama_layanan']) . "</option>";
+                        }
                     }
                     ?>
                 </select>
 
                 <label for="jumlah">Jumlah (Kg/Pcs):</label>
-                <input type="number" step="0.01" id="jumlah" name="jumlah" value="<?php echo $data_edit['jumlah']; ?>" required>
+                <input type="number" step="0.01" id="jumlah" name="jumlah" value="<?php echo $is_edit_mode ? htmlspecialchars($data_edit['jumlah']) : ''; ?>" required>
 
                 <label for="subtotal">Subtotal:</label>
-                <input type="number" step="0.01" id="subtotal" name="subtotal" value="<?php echo $data_edit['subtotal']; ?>" readonly>
+                <input type="number" step="0.01" id="subtotal" name="subtotal" value="<?php echo $is_edit_mode ? htmlspecialchars($data_edit['subtotal']) : ''; ?>" readonly>
 
-                <button type="submit">Update</button>
+                <button type="submit"><?php echo $is_edit_mode ? 'Update' : 'Tambah'; ?></button>
                 <a href="dashboard.php?page=detail_pesanan" class="btn btn-cancel">Batal</a>
             </form>
         <?php
         }
         ?>
     </main>
-
-    <?php // include 'footer.php'; // Footer bisa diinclude di dashboard.php atau di sini 
-    ?>
 </body>
 
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 30, 2025 at 10:28 AM
+-- Generation Time: Jul 06, 2025 at 05:12 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `cuci_kain`
 --
+
+DELIMITER $$
+--
+-- Functions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `fn_get_total_harga_pesanan` (`p_id_pesanan` INT) RETURNS DECIMAL(10,2) DETERMINISTIC BEGIN
+    DECLARE total DECIMAL(10,2);
+    
+    SELECT SUM(subtotal) INTO total
+    FROM detail_pesanan
+    WHERE id_pesanan = p_id_pesanan;
+    
+    IF total IS NULL THEN
+        SET total = 0.00;
+    END IF;
+    
+    RETURN total;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -92,8 +112,8 @@ INSERT INTO `pesanan` (`id_pesanan`, `id_user`, `tanggal`, `status`, `is_deleted
 (2, 6, '2025-06-25', 'Diproses', 0),
 (3, 6, '2025-06-25', 'Diproses', 0),
 (4, 1, '2025-06-25', 'Dibatalkan', 1),
-(5, 13, '2025-07-25', 'Diproses', 0),
-(6, 12, '2025-08-12', 'Diproses', 0);
+(5, 13, '2025-07-25', 'Selesai', 0),
+(6, 12, '2025-08-12', 'Selesai', 0);
 
 -- --------------------------------------------------------
 
@@ -120,7 +140,8 @@ INSERT INTO `user` (`id_user`, `nama`, `alamat`, `no_hp`, `username`, `password`
 (6, 'Muyu', 'Limbungana', '123123123', 'WOOPA', '$2y$10$405g6ez55iF9/xBvDXGFsORqqzm/wR3VkLtNtmvgJWnaaXadYG8ZC', 'admin'),
 (7, 'ROOPA', 'PRAMUKAS', '089653373859', 'ROOPA', '$2y$10$Y8amJMFHo9X3APFAKWFJCejC4IH0uzZSPsM8m1bS5ZsJizi5stNe.', 'user'),
 (12, 'tommy', 'dfewf', '1234', 'UDEEN', 'yammeh', 'admin'),
-(13, 'yammeh', '1grgw', 'gwergrg', 'yeameh', '$2y$10$Mcir7hn4.Xyxsyi7TZK3FuaZs4CvyCGaLpS1MUKaVTgeHXcJpua9q', 'user');
+(13, 'yammeh', '1grgw', 'gwergrg', 'yeameh', '$2y$10$kVaphLd.rRkTmrRCwdKDNu6hnywZCcBV012DlqNGyhWeAkfK09aTa', 'user'),
+(14, 'Tommy Sanjaya', 'Jl lily', '12312', 'user1', '$2y$10$aO0JGTyjlIHdVA3QSBXd3exFLiZwJYwgUOfoMr83oznXDXowFZA/m', 'user');
 
 -- --------------------------------------------------------
 
@@ -207,7 +228,7 @@ ALTER TABLE `pesanan`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints for dumped tables
